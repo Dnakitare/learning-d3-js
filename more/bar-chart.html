@@ -24,25 +24,47 @@
 
 		<script src="https://d3js.org/d3.v4.min.js"></script>
 		<script>
-			var dataset = [80, 100, 56, 120, 180, 30, 40, 120, 160];
 
+			// Data Set
+			// var dataset = [80, 100, 56, 120, 180, 30, 40, 120, 160];
+			var dataset = [1, 2, 3, 4, 5]; // dataset to test the scales function
+
+			// Setting up the chart area svg
 			var svgWidth = 500, svgHeight = 300, barPadding = 9;
 			var barWidth = (svgWidth / dataset.length);
 
+			// Creating the svg area
 			var svg = d3.select('svg')
 				.attr("width", svgWidth)
 				.attr("height", svgHeight);
 
+			// The scale function to increase or decrease the Data Set values for better visualization
+			var yScale = d3.scaleLinear()
+				.domain([0, d3.max(dataset)])
+				.range([0, svgHeight]);
+
+			// Creating the Bar Chart
 			var barChart = svg.selectAll("rect")
 				.data(dataset)
 				.enter()
 				.append("rect")
+
+					// unscaled Y and Height
+				// .attr("y", function(d) {
+				// 	return svgHeight - d;
+				// })
+				// .attr("height", function(d) {
+				// 	return d;
+				// })
+
+				// Y and Height for scaled values
 				.attr("y", function(d) {
-					return svgHeight - d;
+					return svgHeight - yScale(d);
 				})
 				.attr("height", function(d) {
-					return d;
+					return yScale(d);
 				})
+
 				.attr("width", barWidth - barPadding)
 				.attr("class", "bar")
 				.attr("transform", function(d, i) {
@@ -50,6 +72,7 @@
 					return "translate(" + translate + ")";
 				});
 
+			// Creating the text labels using the Data Set
 			var text = svg.selectAll("text")
 				.data(dataset)
 				.enter()
@@ -63,6 +86,7 @@
 					return barWidth * i;
 				})
 				.attr("fill", "#A64C38");
+
 
 
 		</script>
